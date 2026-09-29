@@ -97,7 +97,7 @@ All settings come from environment variables or `.env` (see [.env.example](.env.
 
 | Variable | Default | |
 |---|---|---|
-| `LLM_MODEL` | `anthropic:claude-opus-5-5` | `provider:model`, resolved by LangChain `init_chat_model`: `openai:gpt-5`, `google_genai:gemini-2.5-pro`, `ollama:llama3.1`, … |
+| `LLM_MODEL` | `openai:gpt-5.4-nano` | `provider:model`, resolved by LangChain `init_chat_model`: `openai:gpt-5`, `google_genai:gemini-2.5-pro`, `ollama:llama3.1`, … |
 | provider key | — | `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GOOGLE_API_KEY` (Ollama needs none) |
 | `LLM_KWARGS` | `{}` | extra model settings as JSON, e.g. `{"temperature": 0}` or `{"output_config": {"effort": "high"}}` for Anthropic |
 | `PORT` | `8000` | for `uv run natural_language_insights`; with Docker change the host side of `ports` in `compose.yaml` |
