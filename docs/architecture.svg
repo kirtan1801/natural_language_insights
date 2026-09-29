@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="640" viewBox="0 0 1000 640" font-family="Helvetica, Arial, sans-serif" font-size="13">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#444"/>
+    </marker>
+    <style>
+      .box { fill: #fff; stroke: #333; stroke-width: 1.5; rx: 8; }
+      .group { fill: #f5f7fa; stroke: #9aa5b1; stroke-dasharray: 5 4; rx: 12; }
+      .store { fill: #eef6ee; stroke: #4a7c4a; stroke-width: 1.5; }
+      .ext { fill: #fdf3e6; stroke: #b7791f; stroke-width: 1.5; rx: 8; }
+      .title { font-weight: bold; font-size: 14px; }
+      .small { font-size: 11.5px; fill: #444; }
+      .label { font-size: 11.5px; fill: #333; }
+      .edge { stroke: #444; stroke-width: 1.4; fill: none; marker-end: url(#arrow); }
+      .edge-dash { stroke: #444; stroke-width: 1.4; fill: none; stroke-dasharray: 4 3; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1000" height="640" fill="#ffffff"/>
+
+  <!-- Clients -->
+  <rect class="box" x="30" y="30" width="200" height="90"/>
+  <text class="title" x="130" y="55" text-anchor="middle">Clients</text>
+  <text class="small" x="130" y="77" text-anchor="middle">Browser UI (static/index.html)</text>
+  <text class="small" x="130" y="94" text-anchor="middle">curl / any HTTP client</text>
+  <text class="small" x="130" y="111" text-anchor="middle">scripts/run_evals.py</text>
+
+  <!-- API -->
+  <rect class="group" x="290" y="20" width="400" height="190"/>
+  <text class="title" x="490" y="42" text-anchor="middle">FastAPI service  (main.py, api/routes)</text>
+  <rect class="box" x="310" y="58" width="175" height="62"/>
+  <text x="397" y="80" text-anchor="middle">POST /datasets</text>
+  <text class="small" x="397" y="97" text-anchor="middle">validate, stream to disk,</text>
+  <text class="small" x="397" y="111" text-anchor="middle">size limit → 202 + job_id</text>
+  <rect class="box" x="497" y="58" width="175" height="62"/>
+  <text x="584" y="80" text-anchor="middle">POST /datasets/{id}/questions</text>
+  <text class="small" x="584" y="97" text-anchor="middle">validate, dataset ready?</text>
+  <text class="small" x="584" y="111" text-anchor="middle">→ 202 + job_id</text>
+  <rect class="box" x="310" y="132" width="175" height="62"/>
+  <text x="397" y="154" text-anchor="middle">GET /jobs/{id}</text>
+  <text class="small" x="397" y="171" text-anchor="middle">poll status, read result</text>
+  <text class="small" x="397" y="185" text-anchor="middle">or structured error</text>
+  <rect class="box" x="497" y="132" width="175" height="62"/>
+  <text x="584" y="154" text-anchor="middle">GET /datasets[/{id}]</text>
+  <text class="small" x="584" y="171" text-anchor="middle">status, inferred columns</text>
+  <text class="small" x="584" y="185" text-anchor="middle">errors → {error:{code,message}}</text>
+
+  <path class="edge" d="M230,75 L290,75"/>
+  <text class="label" x="236" y="68">HTTP</text>
+
+  <!-- Job runner -->
+  <rect class="box" x="290" y="250" width="400" height="58"/>
+  <text class="title" x="490" y="273" text-anchor="middle">Job runner  (jobs.py)</text>
+  <text class="small" x="490" y="292" text-anchor="middle">status row in DuckDB · ThreadPoolExecutor(N) · stale jobs failed on restart</text>
+  <path class="edge" d="M397,120 L397,250"/>
+  <path class="edge" d="M584,120 L584,250"/>
+  <text class="label" x="402" y="236">submit</text>
+  <text class="label" x="589" y="236">submit</text>
+
+  <!-- Ingest -->
+  <rect class="group" x="40" y="350" width="400" height="170"/>
+  <text class="title" x="240" y="372" text-anchor="middle">Ingest  (ingest.py)</text>
+  <rect class="box" x="60" y="385" width="170" height="58"/>
+  <text x="145" y="407" text-anchor="middle">load_csv</text>
+  <text class="small" x="145" y="424" text-anchor="middle">read_csv, full-file type</text>
+  <text class="small" x="145" y="437" text-anchor="middle">inference, latin-1 fallback</text>
+  <rect class="box" x="250" y="385" width="170" height="58"/>
+  <text x="335" y="407" text-anchor="middle">build_schema_context</text>
+  <text class="small" x="335" y="424" text-anchor="middle">SUMMARIZE + example</text>
+  <text class="small" x="335" y="437" text-anchor="middle">values per column</text>
+  <path class="edge" d="M230,414 L250,414"/>
+  <text class="small" x="240" y="470" text-anchor="middle">nothing dataset-specific: the profile is the only</text>
+  <text class="small" x="240" y="486" text-anchor="middle">thing the model learns about a file</text>
+
+  <!-- QA -->
+  <rect class="group" x="540" y="350" width="430" height="170"/>
+  <text class="title" x="755" y="372" text-anchor="middle">Question answering  (qa.py)</text>
+  <rect class="box" x="555" y="385" width="125" height="72"/>
+  <text x="617" y="407" text-anchor="middle">generate_sql</text>
+  <text class="small" x="617" y="424" text-anchor="middle">profile + question</text>
+  <text class="small" x="617" y="438" text-anchor="middle">→ {answerable, sql,</text>
+  <text class="small" x="617" y="451" text-anchor="middle">assumptions}</text>
+  <rect class="box" x="693" y="385" width="125" height="72"/>
+  <text x="755" y="407" text-anchor="middle">guard_sql</text>
+  <text class="small" x="755" y="424" text-anchor="middle">1 SELECT, only the</text>
+  <text class="small" x="755" y="438" text-anchor="middle">dataset table, no</text>
+  <text class="small" x="755" y="451" text-anchor="middle">table functions</text>
+  <rect class="box" x="831" y="385" width="125" height="72"/>
+  <text x="893" y="407" text-anchor="middle">run_sql</text>
+  <text class="small" x="893" y="424" text-anchor="middle">timeout interrupt,</text>
+  <text class="small" x="893" y="438" text-anchor="middle">row cap</text>
+  <path class="edge" d="M680,421 L693,421"/>
+  <path class="edge" d="M818,421 L831,421"/>
+  <path class="edge-dash" d="M893,457 C893,500 617,500 617,460"/>
+  <text class="small" x="755" y="508" text-anchor="middle">error → one retry with the error fed back</text>
+
+  <path class="edge" d="M400,308 L300,350"/>
+  <path class="edge" d="M580,308 L700,350"/>
+
+  <!-- Stores -->
+  <rect class="store" x="190" y="560" width="520" height="60" rx="8"/>
+  <text class="title" x="450" y="584" text-anchor="middle">DuckDB file  (database/)</text>
+  <text class="small" x="450" y="603" text-anchor="middle">datasets (status, schema_context) · jobs (status, input, result, error) · dataset_&lt;uuid&gt; tables</text>
+  <rect class="store" x="20" y="560" width="150" height="60" rx="8"/>
+  <text class="title" x="95" y="584" text-anchor="middle">Upload dir</text>
+  <text class="small" x="95" y="603" text-anchor="middle">raw CSV per dataset</text>
+  <path class="edge" d="M145,443 L95,560"/>
+  <path class="edge" d="M300,443 L350,560"/>
+  <path class="edge" d="M893,457 L640,560"/>
+
+  <!-- LLM -->
+  <rect class="ext" x="760" y="560" width="210" height="60"/>
+  <text class="title" x="865" y="584" text-anchor="middle">LLM via LangChain</text>
+  <text class="small" x="865" y="603" text-anchor="middle">Claude · GPT · Gemini · Ollama</text>
+  <path class="edge" d="M617,457 C640,540 740,590 760,590"/>
+</svg>

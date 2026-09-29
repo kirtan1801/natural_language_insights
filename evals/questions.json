@@ -1,0 +1,77 @@
+[
+  {
+    "id": "top_products",
+    "question": "What are the top 10 products by revenue?",
+    "match": "top_values",
+    "k": 3,
+    "reference_sql": [
+      "SELECT description, SUM(line_revenue) FROM t WHERE is_product_line = 1 GROUP BY 1 ORDER BY 2 DESC LIMIT 10",
+      "SELECT description, SUM(line_revenue) FROM t WHERE is_product_line = 1 AND invoice_type = 'SALE' GROUP BY 1 ORDER BY 2 DESC LIMIT 10"
+    ]
+  },
+  {
+    "id": "country_growth",
+    "question": "Which countries grew revenue the most between 2011-Q2 and 2011-Q3?",
+    "match": "top_values",
+    "k": 1,
+    "reference_sql": [
+      "SELECT country, SUM(line_revenue) FILTER (invoice_quarter = '2011-Q3') - SUM(line_revenue) FILTER (invoice_quarter = '2011-Q2') AS growth FROM t WHERE is_revenue_line = 1 GROUP BY 1 ORDER BY growth DESC NULLS LAST LIMIT 5",
+      "SELECT country, SUM(line_revenue) FILTER (invoice_quarter = '2011-Q3') - SUM(line_revenue) FILTER (invoice_quarter = '2011-Q2') AS growth FROM t GROUP BY 1 ORDER BY growth DESC NULLS LAST LIMIT 5"
+    ]
+  },
+  {
+    "id": "net_revenue_month",
+    "question": "What was net revenue in September 2011?",
+    "match": "numbers",
+    "reference_sql": [
+      "SELECT SUM(line_revenue) FROM t WHERE invoice_month = '2011-09'",
+      "SELECT SUM(line_revenue) FROM t WHERE invoice_month = '2011-09' AND is_revenue_line = 1",
+      "SELECT SUM(line_revenue) FROM t WHERE invoice_month = '2011-09' AND is_product_line = 1"
+    ]
+  },
+  {
+    "id": "one_time_customers",
+    "question": "How many customers bought only once, and what share of revenue do they represent?",
+    "match": "numbers",
+    "reference_sql": [
+      "WITH c AS (SELECT customer_id, COUNT(DISTINCT invoice_no) FILTER (invoice_type = 'SALE') AS orders, SUM(line_revenue) AS revenue FROM t WHERE is_identified_customer = 1 GROUP BY 1) SELECT COUNT(*) FILTER (orders = 1) FROM c",
+      "WITH c AS (SELECT customer_id, COUNT(DISTINCT invoice_no) AS orders FROM t WHERE is_identified_customer = 1 AND invoice_type = 'SALE' GROUP BY 1) SELECT COUNT(*) FILTER (orders = 1) FROM c"
+    ]
+  },
+  {
+    "id": "bought_together",
+    "question": "Which products are most often bought together?",
+    "match": "top_values",
+    "k": 1,
+    "columns": 2,
+    "reference_sql": [
+      "WITH l AS (SELECT DISTINCT invoice_no, description FROM t WHERE is_product_line = 1 AND invoice_type = 'SALE') SELECT a.description, b.description, COUNT(*) FROM l a JOIN l b ON a.invoice_no = b.invoice_no AND a.description < b.description GROUP BY 1, 2 ORDER BY 3 DESC LIMIT 5",
+      "WITH l AS (SELECT DISTINCT invoice_no, stock_code, description FROM t WHERE is_product_line = 1) SELECT a.description, b.description, COUNT(*) FROM l a JOIN l b ON a.invoice_no = b.invoice_no AND a.stock_code < b.stock_code GROUP BY 1, 2 ORDER BY 3 DESC LIMIT 5"
+    ]
+  },
+  {
+    "id": "refuse_profit_margin",
+    "question": "What was our gross profit margin in 2011?",
+    "match": "refuse"
+  },
+  {
+    "id": "refuse_marketing_channel",
+    "question": "Which marketing channel brought in the most new customers?",
+    "match": "refuse"
+  },
+  {
+    "id": "refuse_forecast",
+    "question": "What will revenue be in December 2012?",
+    "match": "refuse"
+  },
+  {
+    "id": "refuse_out_of_range",
+    "question": "What was total revenue in 2008?",
+    "match": "refuse"
+  },
+  {
+    "id": "refuse_satisfaction",
+    "question": "How satisfied are customers with delivery times?",
+    "match": "refuse"
+  }
+]

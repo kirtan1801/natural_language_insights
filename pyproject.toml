@@ -1,0 +1,52 @@
+[project]
+name = "natural_language_insights"
+version = "0.1.0"
+description = "Ask plain-English questions about any transactional CSV."
+readme = "README.md"
+authors = [
+    { name = "Kirtan Chhatrala", email = "kachhatrala18@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "duckdb>=1.5.5",
+    "fastapi>=0.141.1",
+    "langchain>=1.4.3",
+    "langchain-anthropic>=1.7.4",
+    "pydantic-settings>=2.15.0",
+    "python-dotenv>=1.2.3",
+    "python-multipart>=0.0.32",
+    "sqlglot>=30.20.0",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[project.scripts]
+natural_language_insights = "natural_language_insights:main"
+
+[project.optional-dependencies]
+openai = [
+    "langchain-openai>=1.6.6",
+]
+google = [
+    "langchain-google-genai>=4.4.0",
+]
+ollama = [
+    "langchain-ollama>=1.1.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.21,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "ruff>=0.16.9",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["tests"]
+
+[tool.ruff]
+line-length = 100
