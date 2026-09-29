@@ -3,7 +3,17 @@
 Load any transactional CSV, then ask it questions in plain English. Each answer comes with the SQL that produced it and the assumptions behind it, and the app refuses questions the data can't answer.
 
 - **Design document:** [docs/design.md](docs/design.md) (architecture, the path a question takes, decisions, what's next)
-- **Demo GIFs:** [docs/gifs/](docs/gifs/)
+
+## Demo
+
+**Loading a CSV the app has never seen, then asking questions about it:**
+
+![Loading a new CSV and asking questions about it](docs/gifs/guide.gif)
+
+<!-- More demos: record, run scripts/make_gif.sh, then add a line like
+![Asking questions about the retail data](docs/gifs/retail-questions.gif)
+![Refusing a question the data can't answer](docs/gifs/refusal.gif)
+-->
 
 ## Run it
 
